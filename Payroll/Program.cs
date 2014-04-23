@@ -14,10 +14,13 @@ namespace Payroll
             var amount = Convert.ToDecimal(Console.ReadLine());
 
             //get employee:
-            var employee = new Employees().GetBy(id, true);
+            var employee = new Employees().GetBy(e => e.Id == id && e.IsActive());
+            
             //credit employee
-            new Bank(employee.BankNumber).GetAccountFor(employee.AccountType, employee.AccountNumber).Credit(amount);
-
+            if(employee != null)
+                employee.Account.Credit(amount);
+            else 
+                Console.WriteLine("Employee not found");
             //prints ending
             Console.WriteLine("Finished. Press any key to terminate.");
             Console.ReadKey();

@@ -10,10 +10,11 @@ namespace Payroll
 
         public int SubsidiaryId { get; set; }
 
-        public int BankNumber { get; set; }
+        public IAccount Account { get; set; }
 
-        public int AccountType { get; set; }
-
-        public int AccountNumber { get; set; }
+        public Boolean IsActive()
+        {
+            return TerminationDate == null && SubsidiaryId == 999;
+        }
     }
 }

@@ -1,7 +1,22 @@
 namespace Payroll
 {
-    public abstract class Account
+    public interface IAccount
     {
-        public abstract void Credit(decimal amount);
+        AccountDetails AccountDetails { get; }
+
+        void Credit(decimal amount);
+    }
+
+    public class AccountDetails
+    {
+        public AccountDetails(Bank bank, int accountNumber)
+        {
+            Bank = bank;
+            AccountNumber = accountNumber;
+        }
+
+        public Bank Bank { get; set; }
+
+        public int AccountNumber { get; set; }
     }
 }

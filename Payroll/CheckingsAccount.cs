@@ -3,25 +3,18 @@ using System;
 namespace Payroll
 {
     //account type 100
-    public class CheckingsAccount : Account
+    public class CheckingsAccount : IAccount
     {
-        private readonly int bankNumber;
-        private readonly int accountNumber;
-
-        public CheckingsAccount(int bankNumber)
+        public CheckingsAccount(AccountDetails accountDetails)
         {
-            this.bankNumber = bankNumber;
+            AccountDetails = accountDetails;
         }
 
-        public CheckingsAccount(int bankNumber, int accountNumber)
-        {
-            this.bankNumber = bankNumber;
-            this.accountNumber = accountNumber;
-        }
+        public AccountDetails AccountDetails { get; private set; }
 
-        public override void Credit(decimal amount)
+        public void Credit(decimal amount)
         {
-            Console.WriteLine("Credit made on account {0} from bank number {1}, in the amount of {2}, from checkings account", accountNumber, bankNumber, amount);
+            Console.WriteLine("Credit made on account {0} from bank number {1}, in the amount of {2}, from checkings account", AccountDetails.AccountNumber, AccountDetails.Bank.BankNumber, amount);
         }
     }
 }

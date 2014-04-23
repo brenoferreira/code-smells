@@ -2,29 +2,51 @@ using System;
 
 namespace Payroll
 {
-    public class Bank
+    public class AccountFactory
     {
-        private readonly int bankNumber;
-
-        public Bank(int bankNumber)
-        {
-            this.bankNumber = bankNumber;
-        }
-
-        public Account GetAccountFor(int accountType, int accountNumber)
+        public IAccount CreateAccount(AccountDetails accountDetails, AccountType accountType)
         {
             switch (accountType)
             {
-                case 100:
-                    return new CheckingsAccount(bankNumber, accountNumber);
-                case 200:
-                    return new SavingsAccount(bankNumber, accountNumber);
-                case 300:
-                    return new CheckingsAndSavingsAccount(bankNumber, accountNumber);
+                case AccountType.Checkings:
+                    return new CheckingsAccount(accountDetails);
+                case AccountType.Savings:
+                    return new SavingsAccount(accountDetails);
+                case AccountType.CheckingsAndSavings:
+                    return new CheckingsAndSavingsAccount(accountDetails);
+                default:
+                    throw new InvalidAccountException();
             }
-            //throws if account type is invalid
-            throw new ArgumentException("account type not found", "accountType");
+        }
+    }
+
+    public class InvalidAccountException : Exception
+    {
+    }
+
+    public class Bank
+    {
+        private AccountFactory factory;
+        public int BankNumber { get; set; }
+
+        public Bank(int bankNumber)
+        {
+            BankNumber = bankNumber;
+
+            this.factory = new AccountFactory();
         }
 
+        public IAccount GetAccountFor(AccountType accountType, int accountNumber)
+        {
+            var accountDetails = new AccountDetails(this, accountNumber);
+            return factory.CreateAccount(accountDetails, accountType);
+        }
+    }
+
+    public enum AccountType
+    {
+        Checkings = 100,
+        Savings = 200,
+        CheckingsAndSavings = 300
     }
 }
